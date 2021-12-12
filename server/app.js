@@ -12,19 +12,31 @@ app.use(express.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT
 
+app.get("/", (req, res) => {
+  res.send("Hello to Server");
+});
 
 // create
 app.post("/insert", (req, res) => {
+  const { name } = req.body
+  const db = dbService.getDbServiceInstance();
 
+  const result = db.insertNewName(name);
+
+  result
+    .then((data) => res.json({ success: true }))
+    .catch((err) => console.log(err));
 });
 
 // read
 app.get("/getAll", (req, res) => {
-  // const db = dbService.getDbServiceInstance();
+  const db = dbService.getDbServiceInstance();
 
-  res.json({
-    success: true
-  })
+  const result = db.getAllData()
+
+  result
+    .then(data => res.json({ data: data }))
+    .catch(err => console.log(err))
 });
 
 // update
